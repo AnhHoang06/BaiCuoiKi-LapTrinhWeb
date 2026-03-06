@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using QLBanNuoc.Models;
-
+// test git 
 namespace QLBanNuoc.Controllers
 {
     public class HomeController : Controller
