@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - LAT Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <style>
+        :root {
+            --lat-orange: #ff6b00; /* Màu cam đặc trưng từ logo LAT */
+            --lat-light-orange: #fff5ed;
+        }
+
+        .bg-lat-orange {
+            background-color: var(--lat-orange) !important;
+        }
+
+        .text-lat-orange {
+            color: var(--lat-orange) !important;
+        }
+
+        #sidebar-wrapper {
+            background: #ffffff;
+            border-right: 1px solid #eee;
+            min-width: 250px;
+            transition: all 0.3s;
+        }
+
+        /* Phần chứa logo */
+        .sidebar-brand-wrapper {
+            padding: 1.5rem 1rem;
+            text-align: center;
+        }
+
+        .sidebar-logo {
+            max-height: 80px; /* Bạn có thể tăng giảm số này để logo to/nhỏ tùy ý */
+            width: auto;
+            object-fit: contain;
+        }
+
+        .nav-link {
+            color: #444;
+            font-weight: 500;
+            padding: 12px 20px;
+            margin: 4px 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+            .nav-link:hover {
+                background: var(--lat-light-orange);
+                color: var(--lat-orange);
+            }
+
+            .nav-link.active {
+                background: var(--lat-orange);
+                color: white !important;
+                box-shadow: 0 4px 12px rgba(255, 107, 0, 0.2);
+            }
+
+        .navbar-text {
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="d-flex" id="wrapper">
+        <div id="sidebar-wrapper" class="min-vh-100">
+            <div class="sidebar-brand-wrapper">
+                <a href="/Admin/Index">
+                    <img src="~/images/logo-lat.png" alt="LAT Logo" class="sidebar-logo">
+                </a>
+                <div class="mt-2 text-uppercase fw-bold text-lat-orange small" style="letter-spacing: 2px;">
+                    Hệ thống Quản trị
+                </div>
+            </div>
+
+            <div class="list-group list-group-flush mt-3">
+                <a href="/Admin/Index" class="nav-link active">
+                    <i class="bi bi-grid-1x2-fill me-3"></i> Dashboard
+                </a>
+                <a href="/Drink/Index" class="nav-link">
+                    <i class="bi bi-cup-hot-fill me-3"></i> Quản lý Đồ uống
+                </a>
+                <a href="/Category/Index" class="nav-link">
+                    <i class="bi bi-tags-fill me-3"></i> Quản lý Danh mục
+                </a>
+                <a href="/Order/Manage" class="nav-link">
+                    <i class="bi bi-cart-check-fill me-3"></i> Quản lý Đơn hàng
+                </a>
+            </div>
+        </div>
+
+        <div id="page-content-wrapper" class="w-100">
+            <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom p-3 shadow-sm">
+                <div class="container-fluid">
+                    <span class="navbar-text fw-bold text-secondary">
+                        <i class="bi bi-info-circle me-1"></i> TRANG QUẢN LÝ
+                    </span>
+                    <div class="ms-auto d-flex align-items-center">
+                        <div class="me-3 text-end">
+                            <small class="d-block text-muted">Chào bạn,</small>
+                            <span class="fw-bold">Quản trị viên</span>
+                        </div>
+                        <a href="/Admin/Login" class="btn btn-outline-danger btn-sm rounded-pill px-3">
+                            <i class="bi bi-box-arrow-right me-1"></i> Thoát
+                        </a>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="container-fluid p-4 bg-light min-vh-100">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
