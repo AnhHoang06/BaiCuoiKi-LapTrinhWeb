@@ -9,7 +9,7 @@
 
     <style>
         :root {
-            --lat-orange: #ff6b00; /* Màu cam đặc trưng từ logo LAT */
+            --lat-orange: #ff6b00; 
             --lat-light-orange: #fff5ed;
         }
 
@@ -80,16 +80,23 @@
             </div>
 
             <div class="list-group list-group-flush mt-3">
-                <a href="/Admin/Index" class="nav-link active">
+                @{
+                    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+                }
+
+                <a href="/Admin/Index" class="nav-link @(currentController == "Admin" ? "active" : "")">
                     <i class="bi bi-grid-1x2-fill me-3"></i> Dashboard
                 </a>
-                <a href="/Drink/Index" class="nav-link">
+
+                <a href="/Drink/Index" class="nav-link @(currentController == "Drink" ? "active" : "")">
                     <i class="bi bi-cup-hot-fill me-3"></i> Quản lý Đồ uống
                 </a>
-                <a href="/Category/Index" class="nav-link">
+
+                <a href="/Category/Index" class="nav-link @(currentController == "Category" ? "active" : "")">
                     <i class="bi bi-tags-fill me-3"></i> Quản lý Danh mục
                 </a>
-                <a href="/Order/Manage" class="nav-link">
+
+                <a href="/Order/Manage" class="nav-link @(currentController == "Order" ? "active" : "")">
                     <i class="bi bi-cart-check-fill me-3"></i> Quản lý Đơn hàng
                 </a>
             </div>
