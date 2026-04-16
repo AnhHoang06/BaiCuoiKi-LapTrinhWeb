@@ -1,23 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http; 
+using QLBanNuoc.Models;
 
 namespace QLBanNuoc.Controllers
 {
     public class AdminController : Controller
     {
-        public IActionResult Index()
+        private readonly AppDbContext _context;
+
+        public AdminController(AppDbContext context)
         {
-            var checkTicket = HttpContext.Session.GetString("AdminLogin");
-
-            if (string.IsNullOrEmpty(checkTicket))
-            {
-                return RedirectToAction("Login");
-            }
-
-            return View();
+            _context = context;
         }
 
-        [HttpGet]
         public IActionResult Login()
         {
             return View();
@@ -26,22 +20,31 @@ namespace QLBanNuoc.Controllers
         [HttpPost]
         public IActionResult Login(string username, string password)
         {
-            // Tài khoản cứng tạm thời (Sau này Dev 1 có DB thì thay bằng kiểm tra SQL)
-            if (username == "admin" && password == "123")
+            var admin = _context.Admins.FirstOrDefault(a => a.Username == username);
+
+            if (admin == null || !BCrypt.Net.BCrypt.Verify(password, admin.PasswordHash))
             {
-                // Cấp vé: Lưu một Session tên là "AdminLogin"
-                HttpContext.Session.SetString("AdminLogin", "true");
-                return RedirectToAction("Index"); // Chuyển hướng vào trong
+                ViewBag.Error = "Sai tài khoản hoặc mật khẩu";
+                return View();
             }
 
-            ViewBag.Error = "Tài khoản hoặc mật khẩu không đúng!";
+            HttpContext.Session.SetString("Admin", admin.Username);
+
+            return RedirectToAction("Index", "Admin");
+        }
+
+        public IActionResult Index()
+        {
+            if (HttpContext.Session.GetString("Admin") == null)
+                return RedirectToAction("Login");
+
             return View();
         }
 
         public IActionResult Logout()
         {
-            HttpContext.Session.Remove("AdminLogin");
-            return RedirectToAction("Login"); 
+            HttpContext.Session.Clear();
+            return RedirectToAction("Login");
         }
     }
 }
