@@ -8,42 +8,47 @@ namespace QLBanNuoc.Data
         {
             if (!context.Drinks.Any())
             {
+                var traSua = context.Categories.FirstOrDefault(c => c.Name == "Trà sữa");
+                var traTraiCay = context.Categories.FirstOrDefault(c => c.Name == "Trà trái cây");
+                var caPhe = context.Categories.FirstOrDefault(c => c.Name == "Cà phê");
+                var daXay = context.Categories.FirstOrDefault(c => c.Name == "Đá xay");
+
+                if (traSua == null || traTraiCay == null || caPhe == null || daXay == null)
+                    return;
+
                 context.Drinks.AddRange(
                     new Drink
                     {
                         Name = "Trà sữa truyền thống",
                         Price = 25000,
-                        CategoryId = 1,
+                        CategoryId = traSua.Id,
                         ImageUrl = "",
                         Description = "Best seller",
                         IsAvailable = true
                     },
-
                     new Drink
                     {
                         Name = "Trà đào cam sả",
                         Price = 30000,
-                        CategoryId = 2,
+                        CategoryId = traTraiCay.Id,
                         ImageUrl = "",
                         Description = "Mát lạnh",
                         IsAvailable = true
                     },
-
                     new Drink
                     {
                         Name = "Cà phê sữa đá",
                         Price = 22000,
-                        CategoryId = 3,
+                        CategoryId = caPhe.Id,
                         ImageUrl = "",
                         Description = "Đậm vị Việt Nam",
                         IsAvailable = true
                     },
-
                     new Drink
                     {
                         Name = "Matcha đá xay",
                         Price = 35000,
-                        CategoryId = 4,
+                        CategoryId = daXay.Id,
                         ImageUrl = "",
                         Description = "Thơm béo",
                         IsAvailable = true
