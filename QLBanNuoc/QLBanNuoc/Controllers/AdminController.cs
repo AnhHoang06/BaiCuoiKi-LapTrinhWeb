@@ -40,7 +40,7 @@ namespace QLBanNuoc.Controllers
 
             return View();
         }
-
+        // Vailoz
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
