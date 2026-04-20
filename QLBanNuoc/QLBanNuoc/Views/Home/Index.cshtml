@@ -1,8 +1,1162 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model QLBanNuoc.ViewModels.HomeIndexViewModel
+@{
+    ViewData["Title"] = "LAT - Trang Chủ";
+    Layout = null;
 }
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LATShop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Pacifico&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        :root {
+            --orange: #F97316;
+            --orange-dark: #EA580C;
+            --orange-light: #FED7AA;
+            --cyan: #06B6D4;
+            --cyan-dark: #0891B2;
+            --green: #16A34A;
+            --green-dark: #15803D;
+            --white: #ffffff;
+            --gray-50: #F8FAFC;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-700: #374151;
+            --gray-900: #111827;
+            --shadow: 0 4px 20px rgba(0,0,0,0.10);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.14);
+            --radius: 14px;
+        }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            background: var(--orange);
+            padding: 0 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 12px rgba(249,115,22,0.3);
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .brand-name {
+            font-family: 'Pacifico', cursive;
+            color: white;
+            font-size: 20px;
+            letter-spacing: 1px;
+        }
+
+        .navbar-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            list-style: none;
+        }
+
+            .navbar-links a {
+                color: white;
+                text-decoration: none;
+                font-weight: 700;
+                font-size: 15px;
+                opacity: 0.92;
+                transition: opacity 0.2s;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+
+                .navbar-links a:hover {
+                    opacity: 1;
+                }
+
+        /* Cart icon */
+        .cart-btn {
+            position: relative;
+            background: rgba(255,255,255,0.18);
+            border: none;
+            border-radius: 10px;
+            padding: 8px 16px;
+            color: white;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s;
+            text-decoration: none;
+        }
+
+            .cart-btn:hover {
+                background: rgba(255,255,255,0.28);
+                color: white;
+            }
+
+        .cart-badge {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: #EF4444;
+            color: white;
+            font-size: 11px;
+            font-weight: 800;
+            min-width: 20px;
+            height: 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            display: none;
+        }
+
+            .cart-badge.show {
+                display: flex;
+            }
+
+        /* User icon with admin link */
+        .user-btn {
+            position: relative;
+            background: rgba(255,255,255,0.18);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+            .user-btn:hover {
+                background: rgba(255,255,255,0.32);
+            }
+
+        .admin-dropdown {
+            display: none;
+            position: absolute;
+            top: 52px;
+            right: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            padding: 16px;
+            width: 280px;
+            z-index: 2000;
+        }
+
+            .admin-dropdown.show {
+                display: block;
+            }
+
+            .admin-dropdown p {
+                font-size: 13px;
+                color: #64748B;
+                margin-bottom: 8px;
+                font-weight: 600;
+            }
+
+        .admin-input-group {
+            display: flex;
+            gap: 8px;
+        }
+
+            .admin-input-group input {
+                flex: 1;
+                border: 1.5px solid var(--gray-200);
+                border-radius: 8px;
+                padding: 8px 12px;
+                font-size: 13px;
+                font-family: 'Nunito', sans-serif;
+                outline: none;
+            }
+
+                .admin-input-group input:focus {
+                    border-color: var(--orange);
+                }
+
+        .admin-go-btn {
+            background: var(--orange);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+
+            .admin-go-btn:hover {
+                background: var(--orange-dark);
+            }
+
+        /* ===== HERO BANNER ===== */
+        .hero {
+            position: relative;
+            height: 320px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0EA5E9 0%, #06B6D4 40%, #0891B2 70%, #0E7490 100%);
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.15) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.10) 0%, transparent 40%);
+        }
+
+        .hero-water-drops {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+        }
+
+        .drop {
+            position: absolute;
+            background: rgba(255,255,255,0.12);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+            .drop:nth-child(1) {
+                width: 80px;
+                height: 100px;
+                left: 5%;
+                top: 10%;
+                animation-delay: 0s;
+            }
+
+            .drop:nth-child(2) {
+                width: 50px;
+                height: 65px;
+                left: 15%;
+                top: 50%;
+                animation-delay: 1s;
+            }
+
+            .drop:nth-child(3) {
+                width: 120px;
+                height: 150px;
+                right: 10%;
+                top: 5%;
+                animation-delay: 2s;
+            }
+
+            .drop:nth-child(4) {
+                width: 60px;
+                height: 78px;
+                right: 25%;
+                top: 55%;
+                animation-delay: 0.5s;
+            }
+
+            .drop:nth-child(5) {
+                width: 40px;
+                height: 52px;
+                left: 45%;
+                top: 20%;
+                animation-delay: 3s;
+            }
+
+            .drop:nth-child(6) {
+                width: 90px;
+                height: 115px;
+                right: 40%;
+                bottom: 5%;
+                animation-delay: 1.5s;
+            }
+
+        @@keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+
+            .hero-content h1 {
+                font-family: 'Pacifico', cursive;
+                font-size: 52px;
+                text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+                letter-spacing: 2px;
+                margin-bottom: 12px;
+            }
+
+            .hero-content p {
+                font-size: 17px;
+                font-weight: 600;
+                opacity: 0.92;
+                text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            }
+
+        .hero-wave {
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ===== SECTION TITLE ===== */
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--gray-900);
+            margin: 36px 0 20px;
+        }
+
+        .section-title-icon {
+            font-size: 26px;
+        }
+
+        /* ===== FILTER BAR ===== */
+        .filter-bar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+
+        .filter-btn {
+            padding: 8px 20px;
+            border-radius: 50px;
+            border: 2px solid var(--gray-200);
+            background: white;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--gray-700);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+            .filter-btn:hover, .filter-btn.active {
+                background: var(--orange);
+                border-color: var(--orange);
+                color: white;
+                box-shadow: 0 4px 12px rgba(249,115,22,0.3);
+            }
+
+        /* ===== PRODUCT GRID ===== */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 24px;
+            padding-bottom: 48px;
+        }
+
+        /* ===== PRODUCT CARD ===== */
+        .product-card {
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.25s, box-shadow 0.25s;
+            position: relative;
+        }
+
+            .product-card:hover {
+                transform: translateY(-6px);
+                box-shadow: var(--shadow-lg);
+            }
+
+            .product-card.hidden {
+                display: none;
+            }
+
+        .product-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: linear-gradient(135deg, var(--orange) 0%, #FBBF24 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .product-img img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+        .product-img-placeholder {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--orange) 0%, #FBBF24 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 64px;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-hot {
+            background: #EF4444;
+            color: white;
+        }
+
+        .badge-premium {
+            background: #7C3AED;
+            color: white;
+        }
+
+        .badge-new {
+            background: #10B981;
+            color: white;
+        }
+
+        .product-info {
+            padding: 16px;
+        }
+
+        .product-name {
+            font-weight: 800;
+            font-size: 16px;
+            margin-bottom: 6px;
+            color: var(--gray-900);
+        }
+
+        .product-desc {
+            font-size: 13px;
+            color: #64748B;
+            line-height: 1.5;
+            margin-bottom: 10px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+
+        .stars {
+            color: #F59E0B;
+            font-size: 13px;
+        }
+
+        .rating-text {
+            font-size: 12px;
+            color: #64748B;
+            font-weight: 600;
+        }
+
+        .product-price {
+            color: var(--orange-dark);
+            font-weight: 900;
+            font-size: 18px;
+            margin-bottom: 14px;
+        }
+
+            .product-price::before {
+                content: "đ ";
+            }
+
+        .product-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .btn-detail {
+            background: var(--cyan);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+
+            .btn-detail:hover {
+                background: var(--cyan-dark);
+                color: white;
+            }
+
+        .btn-add-cart {
+            background: var(--green);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+            .btn-add-cart:hover {
+                background: var(--green-dark);
+            }
+
+            .btn-add-cart:active {
+                transform: scale(0.97);
+            }
+
+        /* ===== PRODUCT DETAIL MODAL ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+            .modal-overlay.show {
+                display: flex;
+            }
+
+        .modal-box {
+            background: white;
+            border-radius: 20px;
+            max-width: 560px;
+            width: 90%;
+            overflow: hidden;
+            animation: slideUp 0.3s ease;
+            position: relative;
+        }
+
+        @@keyframes slideUp {
+            from {
+                transform: translateY(40px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-img {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, var(--orange) 0%, #FBBF24 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .modal-img img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+        .modal-close {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: rgba(255,255,255,0.85);
+            border: none;
+            border-radius: 50%;
+            width: 34px;
+            height: 34px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 900;
+            margin-bottom: 8px;
+        }
+
+        .modal-category {
+            display: inline-block;
+            background: var(--orange-light);
+            color: var(--orange-dark);
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .modal-desc {
+            color: #475569;
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+
+        .modal-price {
+            font-size: 26px;
+            font-weight: 900;
+            color: var(--orange-dark);
+            margin-bottom: 20px;
+        }
+
+        .modal-qty {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+            .modal-qty label {
+                font-weight: 700;
+                font-size: 14px;
+            }
+
+        .qty-control {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            border: 2px solid var(--gray-200);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .qty-btn {
+            width: 36px;
+            height: 36px;
+            background: var(--gray-100);
+            border: none;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .qty-btn:hover {
+                background: var(--orange-light);
+            }
+
+        .qty-val {
+            width: 44px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 16px;
+            border: none;
+            outline: none;
+            background: white;
+        }
+
+        .modal-add-btn {
+            width: 100%;
+            background: var(--green);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 13px;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 800;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+            .modal-add-btn:hover {
+                background: var(--green-dark);
+            }
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--gray-900);
+            color: white;
+            padding: 14px 22px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 14px;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: var(--shadow-lg);
+            transform: translateY(80px);
+            opacity: 0;
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+            .toast.show {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: white;
+            border-top: 1px solid var(--gray-200);
+            padding: 40px 0 20px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+
+        .footer h3 {
+            font-weight: 800;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .footer p, .footer a {
+            font-size: 14px;
+            color: #64748B;
+            text-decoration: none;
+            line-height: 2;
+        }
+
+            .footer a:hover {
+                color: var(--orange);
+            }
+
+        .footer-social {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+            .footer-social a {
+                width: 36px;
+                height: 36px;
+                background: var(--gray-100);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 16px;
+                color: var(--gray-700);
+                transition: all 0.2s;
+            }
+
+                .footer-social a:hover {
+                    background: var(--orange);
+                    color: white;
+                }
+
+        .footer-bottom {
+            border-top: 1px solid var(--gray-200);
+            padding-top: 20px;
+            text-align: center;
+            font-size: 13px;
+            color: #94A3B8;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden; 
+        }
+
+            .brand-icon img {
+                width: 70%; 
+                height: 70%;
+                object-fit: contain;
+            }
+    </style>
+</head>
+<body>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar">
+        <a href="/" class="navbar-brand">
+            <div class="brand-icon">
+                <img src="~/images/logo-lat2.png" alt="Logo" />
+            </div>
+            <span class="brand-name">LATShop</span>
+        </a>
+        <ul class="navbar-links">
+            <li><a href="/"><i class="fas fa-home"></i> Trang chủ</a></li>
+            <li>
+                <a href="/Home/Cart" class="cart-btn" id="cartNavBtn">
+                    <i class="fas fa-shopping-cart"></i>
+                    Giỏ hàng
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </a>
+            </li>
+            <li style="position:relative;">
+                <button class="user-btn" id="userBtn" title="Quản trị">
+                    <i class="fas fa-user"></i>
+                </button>
+                <div class="admin-dropdown" id="adminDropdown">
+                    <p><i class="fas fa-lock"></i> Truy cập trang quản lý</p>
+                    <div class="admin-input-group">
+                        <input type="text" id="adminPathInput" placeholder="/Admin/Index" />
+                        <button class="admin-go-btn" onclick="goToAdmin()">Đi</button>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- ===== HERO BANNER ===== -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-water-drops">
+            <div class="drop"></div>
+            <div class="drop"></div>
+            <div class="drop"></div>
+            <div class="drop"></div>
+            <div class="drop"></div>
+            <div class="drop"></div>
+        </div>
+        <div class="hero-content">
+            <h1>💧 LAT SHOP</h1>
+            <p>Nước uống chất lượng cao – Đem lại sức khỏe cho gia đình bạn</p>
+        </div>
+        <svg class="hero-wave" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 60" preserveAspectRatio="none">
+            <path fill="#F8FAFC" d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" />
+        </svg>
+    </section>
+
+    <!-- ===== MAIN ===== -->
+    <main class="container">
+
+        <div class="section-title">
+            <span class="section-title-icon">🏆</span>
+            Sản Phẩm Nổi Bật
+        </div>
+
+        <!-- FILTER -->
+        <div class="filter-bar" id="filterBar">
+            <button class="filter-btn active" onclick="filterCat(this, 0)">Tất cả</button>
+            @if (Model?.Categories != null)
+            {
+                foreach (var cat in Model.Categories)
+                {
+                    <button class="filter-btn" onclick="filterCat(this, @cat.Id)">@cat.Name</button>
+                }
+            }
+        </div>
+
+        <!-- PRODUCTS GRID -->
+        <div class="products-grid" id="productsGrid">
+            @if (Model?.Drinks != null && Model.Drinks.Any())
+            {
+                foreach (var drink in Model.Drinks)
+                {
+                    <div class="product-card" data-cat="@drink.CategoryId" data-id="@drink.Id">
+                        <div style="position:relative;">
+                            @if (!string.IsNullOrEmpty(drink.ImageUrl))
+                            {
+                                <img src="@drink.ImageUrl" alt="@drink.Name" style="width:100%;height:200px;object-fit:cover;" />
+                            }
+                            else
+                            {
+                                <div class="product-img-placeholder">💧</div>
+                            }
+                        </div>
+                        <div class="product-info">
+                            <div class="product-name">@drink.Name</div>
+                            <div class="product-desc">@drink.Description</div>
+                            <div class="product-price">@drink.Price.ToString("N0")</div>
+                            <div class="product-actions">
+                                <button class="btn-detail"
+                                        onclick="openDetail(@drink.Id, '@Html.Raw(drink.Name.Replace("'", "\\'"))', '@Html.Raw((drink.Description ?? "").Replace("'", "\\'"))', @drink.Price, '@drink.ImageUrl', '@drink.Category?.Name')">
+                                    <i class="fas fa-eye"></i> Chi tiết
+                                </button>
+                                <button class="btn-add-cart"
+                                        onclick="addToCart(@drink.Id, '@Html.Raw(drink.Name.Replace("'", "\\'"))', @drink.Price, '@drink.ImageUrl')">
+                                    <i class="fas fa-cart-plus"></i> Thêm giỏ
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p style="color:#94A3B8; grid-column:1/-1; text-align:center; padding:40px;">
+                    Chưa có sản phẩm nào.
+                </p>
+            }
+        </div>
+    </main>
+
+    <!-- ===== DETAIL MODAL ===== -->
+    <div class="modal-overlay" id="detailModal" onclick="closeModal(event)">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeDetailModal()"><i class="fas fa-times"></i></button>
+            <div class="modal-img" id="modalImg">💧</div>
+            <div class="modal-body">
+                <div class="modal-category" id="modalCategory">Danh mục</div>
+                <div class="modal-title" id="modalTitle">Tên sản phẩm</div>
+                <div class="modal-desc" id="modalDesc">Mô tả</div>
+                <div class="modal-price" id="modalPrice">0</div>
+                <div class="modal-qty">
+                    <label>Số lượng:</label>
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty(-1)">−</button>
+                        <span class="qty-val" id="modalQty">1</span>
+                        <button class="qty-btn" onclick="changeQty(1)">+</button>
+                    </div>
+                </div>
+                <button class="modal-add-btn" id="modalAddBtn">
+                    <i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== TOAST ===== -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle" style="color:#4ADE80;"></i>
+        <span id="toastMsg">Đã thêm vào giỏ!</span>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <h3>Water Shop</h3>
+                    <p>Cung cấp nước uống chất lượng cao cho gia đình Việt</p>
+                </div>
+                <div>
+                    <h3>Liên hệ</h3>
+                    <p><i class="fas fa-phone"></i> 0123 456 789</p>
+                    <p><i class="fas fa-envelope"></i> contact@watershop.vn</p>
+                </div>
+                <div>
+                    <h3>Mạng xã hội</h3>
+                    <div class="footer-social">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">© 2024 Water Shop. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <script>
+        // ===== CART (localStorage) =====
+        let cart = JSON.parse(localStorage.getItem('wsCart') || '[]');
+
+        function saveCart() {
+            localStorage.setItem('wsCart', JSON.stringify(cart));
+            updateBadge();
+        }
+
+        function updateBadge() {
+            const total = cart.reduce((s, i) => s + i.qty, 0);
+            const badge = document.getElementById('cartBadge');
+            badge.textContent = total;
+            if (total > 0) badge.classList.add('show');
+            else badge.classList.remove('show');
+        }
+
+        function addToCart(id, name, price, img, qty = 1) {
+            const existing = cart.find(i => i.id === id);
+            if (existing) existing.qty += qty;
+            else cart.push({ id, name, price, img, qty });
+            saveCart();
+            showToast(`Đã thêm "${name}" vào giỏ!`);
+        }
+
+        // ===== FILTER =====
+        function filterCat(btn, catId) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.product-card').forEach(card => {
+                if (catId === 0 || parseInt(card.dataset.cat) === catId) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+        // ===== DETAIL MODAL =====
+        let currentModal = { id: null, name: '', price: 0, img: '' };
+        let modalQtyVal = 1;
+
+        function openDetail(id, name, desc, price, img, catName) {
+            currentModal = { id, name, price, img };
+            modalQtyVal = 1;
+            document.getElementById('modalTitle').textContent = name;
+            document.getElementById('modalDesc').textContent = desc || 'Không có mô tả.';
+            document.getElementById('modalPrice').textContent = 'đ ' + price.toLocaleString('vi-VN');
+            document.getElementById('modalCategory').textContent = catName || 'Sản phẩm';
+            document.getElementById('modalQty').textContent = 1;
+
+            const imgEl = document.getElementById('modalImg');
+            if (img) {
+                imgEl.innerHTML = `<img src="${img}" alt="${name}" style="width:100%;height:100%;object-fit:cover;" />`;
+            } else {
+                imgEl.innerHTML = '💧';
+            }
+
+            document.getElementById('modalAddBtn').onclick = () => {
+                addToCart(currentModal.id, currentModal.name, currentModal.price, currentModal.img, modalQtyVal);
+                closeDetailModal();
+            };
+
+            document.getElementById('detailModal').classList.add('show');
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.remove('show');
+        }
+
+        function closeModal(e) {
+            if (e.target === document.getElementById('detailModal')) closeDetailModal();
+        }
+
+        function changeQty(delta) {
+            modalQtyVal = Math.max(1, modalQtyVal + delta);
+            document.getElementById('modalQty').textContent = modalQtyVal;
+        }
+
+        // ===== TOAST =====
+        let toastTimer;
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            toast.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        // ===== ADMIN DROPDOWN =====
+        document.getElementById('userBtn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            document.getElementById('adminDropdown').classList.toggle('show');
+        });
+
+        document.addEventListener('click', function() {
+            document.getElementById('adminDropdown').classList.remove('show');
+        });
+
+        function goToAdmin() {
+            const path = document.getElementById('adminPathInput').value.trim();
+            if (path) window.location.href = path;
+        }
+
+        document.getElementById('adminPathInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') goToAdmin();
+        });
+
+        // Init badge
+        updateBadge();
+    </script>
+</body>
+</html>
