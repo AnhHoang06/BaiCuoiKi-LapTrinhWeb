@@ -37,7 +37,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QLBanNuoc.Models;
-using QLBanNuoc.ViewModels;
+
 
 namespace QLBanNuoc.Controllers
 {
@@ -55,16 +55,14 @@ namespace QLBanNuoc.Controllers
         // GET: /  hoặc /Home/Index
         public async Task<IActionResult> Index()
         {
-            var vm = new HomeIndexViewModel
-            {
-                Drinks = await _context.Drinks
-                    .Include(d => d.Category)
-                    .Where(d => d.IsAvailable)
-                    .OrderBy(d => d.CategoryId)
-                    .ToListAsync(),
-                Categories = await _context.Categories.ToListAsync()
-            };
-            return View(vm);
+            var drinks = await _context.Drinks
+                .Include(d => d.Category)
+                .Where(d => d.IsAvailable)
+                .ToListAsync();
+
+            ViewBag.Categories = await _context.Categories.ToListAsync();
+
+            return View(drinks);
         }
 
         // GET: /Home/Cart

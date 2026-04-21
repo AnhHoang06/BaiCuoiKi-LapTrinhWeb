@@ -1,4 +1,4 @@
-﻿@model QLBanNuoc.ViewModels.HomeIndexViewModel
+﻿@model List<QLBanNuoc.Models.Drink>
 @{
     ViewData["Title"] = "LAT - Trang Chủ";
     Layout = null;
@@ -20,7 +20,6 @@
             --cyan-dark: #0891B2;
             --green: #16A34A;
             --green-dark: #15803D;
-            --white: #ffffff;
             --gray-50: #F8FAFC;
             --gray-100: #F1F5F9;
             --gray-200: #E2E8F0;
@@ -43,7 +42,7 @@
             color: var(--gray-900);
         }
 
-        /* ===== NAVBAR ===== */
+        /* NAVBAR */
         .navbar {
             background: var(--orange);
             padding: 0 40px;
@@ -72,14 +71,19 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            overflow: hidden;
         }
+
+            .brand-icon img {
+                width: 70%;
+                height: 70%;
+                object-fit: contain;
+            }
 
         .brand-name {
             font-family: 'Pacifico', cursive;
             color: white;
             font-size: 20px;
-            letter-spacing: 1px;
         }
 
         .navbar-links {
@@ -94,18 +98,16 @@
                 text-decoration: none;
                 font-weight: 700;
                 font-size: 15px;
-                opacity: 0.92;
-                transition: opacity 0.2s;
                 display: flex;
                 align-items: center;
                 gap: 6px;
+                opacity: 0.92;
             }
 
                 .navbar-links a:hover {
                     opacity: 1;
                 }
 
-        /* Cart icon */
         .cart-btn {
             position: relative;
             background: rgba(255,255,255,0.18);
@@ -139,98 +141,17 @@
             min-width: 20px;
             height: 20px;
             border-radius: 10px;
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
             padding: 0 4px;
-            display: none;
         }
 
             .cart-badge.show {
                 display: flex;
             }
 
-        /* User icon with admin link */
-        .user-btn {
-            position: relative;
-            background: rgba(255,255,255,0.18);
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s;
-        }
-
-            .user-btn:hover {
-                background: rgba(255,255,255,0.32);
-            }
-
-        .admin-dropdown {
-            display: none;
-            position: absolute;
-            top: 52px;
-            right: 0;
-            background: white;
-            border-radius: 12px;
-            box-shadow: var(--shadow-lg);
-            padding: 16px;
-            width: 280px;
-            z-index: 2000;
-        }
-
-            .admin-dropdown.show {
-                display: block;
-            }
-
-            .admin-dropdown p {
-                font-size: 13px;
-                color: #64748B;
-                margin-bottom: 8px;
-                font-weight: 600;
-            }
-
-        .admin-input-group {
-            display: flex;
-            gap: 8px;
-        }
-
-            .admin-input-group input {
-                flex: 1;
-                border: 1.5px solid var(--gray-200);
-                border-radius: 8px;
-                padding: 8px 12px;
-                font-size: 13px;
-                font-family: 'Nunito', sans-serif;
-                outline: none;
-            }
-
-                .admin-input-group input:focus {
-                    border-color: var(--orange);
-                }
-
-        .admin-go-btn {
-            background: var(--orange);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 8px 14px;
-            font-weight: 700;
-            cursor: pointer;
-            font-size: 13px;
-            transition: background 0.2s;
-        }
-
-            .admin-go-btn:hover {
-                background: var(--orange-dark);
-            }
-
-        /* ===== HERO BANNER ===== */
+        /* HERO */
         .hero {
             position: relative;
             height: 320px;
@@ -307,11 +228,11 @@
 
         @@keyframes float {
             0%, 100% {
-                transform: translateY(0) rotate(0deg);
+                transform: translateY(0) rotate(0deg)
             }
 
             50% {
-                transform: translateY(-20px) rotate(5deg);
+                transform: translateY(-20px) rotate(5deg)
             }
         }
 
@@ -328,7 +249,7 @@
         }
 
             .hero-content h1 {
-                font-family: 'Pacifico', cursive;
+                font-family: 'Pacifico',cursive;
                 font-size: 52px;
                 text-shadow: 0 4px 20px rgba(0,0,0,0.2);
                 letter-spacing: 2px;
@@ -339,7 +260,6 @@
                 font-size: 17px;
                 font-weight: 600;
                 opacity: 0.92;
-                text-shadow: 0 2px 8px rgba(0,0,0,0.15);
             }
 
         .hero-wave {
@@ -349,29 +269,23 @@
             right: 0;
         }
 
-        /* ===== MAIN CONTENT ===== */
+        /* MAIN */
         .container {
             max-width: 1280px;
             margin: 0 auto;
             padding: 0 24px;
         }
 
-        /* ===== SECTION TITLE ===== */
         .section-title {
             display: flex;
             align-items: center;
             gap: 10px;
             font-size: 24px;
             font-weight: 900;
-            color: var(--gray-900);
             margin: 36px 0 20px;
         }
 
-        .section-title-icon {
-            font-size: 26px;
-        }
-
-        /* ===== FILTER BAR ===== */
+        /* FILTER */
         .filter-bar {
             display: flex;
             gap: 10px;
@@ -384,7 +298,7 @@
             border-radius: 50px;
             border: 2px solid var(--gray-200);
             background: white;
-            font-family: 'Nunito', sans-serif;
+            font-family: 'Nunito',sans-serif;
             font-weight: 700;
             font-size: 14px;
             color: var(--gray-700);
@@ -399,22 +313,20 @@
                 box-shadow: 0 4px 12px rgba(249,115,22,0.3);
             }
 
-        /* ===== PRODUCT GRID ===== */
+        /* GRID */
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fill,minmax(260px,1fr));
             gap: 24px;
             padding-bottom: 48px;
         }
 
-        /* ===== PRODUCT CARD ===== */
         .product-card {
             background: white;
             border-radius: var(--radius);
             overflow: hidden;
             box-shadow: var(--shadow);
-            transition: transform 0.25s, box-shadow 0.25s;
-            position: relative;
+            transition: transform 0.25s,box-shadow 0.25s;
         }
 
             .product-card:hover {
@@ -426,59 +338,14 @@
                 display: none;
             }
 
-        .product-img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            background: linear-gradient(135deg, var(--orange) 0%, #FBBF24 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 60px;
-            position: relative;
-            overflow: hidden;
-        }
-
-            .product-img img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
-
         .product-img-placeholder {
             width: 100%;
             height: 200px;
-            background: linear-gradient(135deg, var(--orange) 0%, #FBBF24 100%);
+            background: linear-gradient(135deg,var(--orange) 0%,#FBBF24 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 64px;
-        }
-
-        .product-badge {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-        }
-
-        .badge-hot {
-            background: #EF4444;
-            color: white;
-        }
-
-        .badge-premium {
-            background: #7C3AED;
-            color: white;
-        }
-
-        .badge-new {
-            background: #10B981;
-            color: white;
         }
 
         .product-info {
@@ -489,7 +356,6 @@
             font-weight: 800;
             font-size: 16px;
             margin-bottom: 6px;
-            color: var(--gray-900);
         }
 
         .product-desc {
@@ -501,24 +367,6 @@
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-        }
-
-        .product-rating {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            margin-bottom: 10px;
-        }
-
-        .stars {
-            color: #F59E0B;
-            font-size: 13px;
-        }
-
-        .rating-text {
-            font-size: 12px;
-            color: #64748B;
-            font-weight: 600;
         }
 
         .product-price {
@@ -544,7 +392,7 @@
             border: none;
             border-radius: 8px;
             padding: 10px;
-            font-family: 'Nunito', sans-serif;
+            font-family: 'Nunito',sans-serif;
             font-weight: 700;
             font-size: 14px;
             cursor: pointer;
@@ -553,12 +401,10 @@
             align-items: center;
             justify-content: center;
             gap: 6px;
-            text-decoration: none;
         }
 
             .btn-detail:hover {
                 background: var(--cyan-dark);
-                color: white;
             }
 
         .btn-add-cart {
@@ -567,11 +413,11 @@
             border: none;
             border-radius: 8px;
             padding: 10px;
-            font-family: 'Nunito', sans-serif;
+            font-family: 'Nunito',sans-serif;
             font-weight: 700;
             font-size: 14px;
             cursor: pointer;
-            transition: background 0.2s, transform 0.15s;
+            transition: background 0.2s,transform 0.15s;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -586,7 +432,7 @@
                 transform: scale(0.97);
             }
 
-        /* ===== PRODUCT DETAIL MODAL ===== */
+        /* MODAL */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -615,24 +461,23 @@
         @@keyframes slideUp {
             from {
                 transform: translateY(40px);
-                opacity: 0;
+                opacity: 0
             }
 
             to {
                 transform: translateY(0);
-                opacity: 1;
+                opacity: 1
             }
         }
 
         .modal-img {
             width: 100%;
             height: 220px;
-            background: linear-gradient(135deg, var(--orange) 0%, #FBBF24 100%);
+            background: linear-gradient(135deg,var(--orange) 0%,#FBBF24 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 80px;
-            position: relative;
             overflow: hidden;
         }
 
@@ -709,7 +554,6 @@
         .qty-control {
             display: flex;
             align-items: center;
-            gap: 0;
             border: 2px solid var(--gray-200);
             border-radius: 10px;
             overflow: hidden;
@@ -750,7 +594,7 @@
             border: none;
             border-radius: 10px;
             padding: 13px;
-            font-family: 'Nunito', sans-serif;
+            font-family: 'Nunito',sans-serif;
             font-weight: 800;
             font-size: 16px;
             cursor: pointer;
@@ -765,7 +609,7 @@
                 background: var(--green-dark);
             }
 
-        /* ===== TOAST ===== */
+        /* TOAST */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -783,7 +627,7 @@
             box-shadow: var(--shadow-lg);
             transform: translateY(80px);
             opacity: 0;
-            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
         }
 
             .toast.show {
@@ -791,7 +635,7 @@
                 opacity: 1;
             }
 
-        /* ===== FOOTER ===== */
+        /* FOOTER */
         .footer {
             background: white;
             border-top: 1px solid var(--gray-200);
@@ -853,28 +697,11 @@
             font-size: 13px;
             color: #94A3B8;
         }
-
-        .brand-icon {
-            width: 42px;
-            height: 42px;
-            background: white;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden; 
-        }
-
-            .brand-icon img {
-                width: 70%; 
-                height: 70%;
-                object-fit: contain;
-            }
     </style>
 </head>
 <body>
 
-    <!-- ===== NAVBAR ===== -->
+    <!-- NAVBAR -->
     <nav class="navbar">
         <a href="/" class="navbar-brand">
             <div class="brand-icon">
@@ -891,31 +718,15 @@
                     <span class="cart-badge" id="cartBadge">0</span>
                 </a>
             </li>
-            <li style="position:relative;">
-                <button class="user-btn" id="userBtn" title="Quản trị">
-                    <i class="fas fa-user"></i>
-                </button>
-                <div class="admin-dropdown" id="adminDropdown">
-                    <p><i class="fas fa-lock"></i> Truy cập trang quản lý</p>
-                    <div class="admin-input-group">
-                        <input type="text" id="adminPathInput" placeholder="/Admin/Index" />
-                        <button class="admin-go-btn" onclick="goToAdmin()">Đi</button>
-                    </div>
-                </div>
-            </li>
         </ul>
     </nav>
 
-    <!-- ===== HERO BANNER ===== -->
+    <!-- HERO -->
     <section class="hero">
         <div class="hero-bg"></div>
         <div class="hero-water-drops">
-            <div class="drop"></div>
-            <div class="drop"></div>
-            <div class="drop"></div>
-            <div class="drop"></div>
-            <div class="drop"></div>
-            <div class="drop"></div>
+            <div class="drop"></div><div class="drop"></div><div class="drop"></div>
+            <div class="drop"></div><div class="drop"></div><div class="drop"></div>
         </div>
         <div class="hero-content">
             <h1>💧 LAT SHOP</h1>
@@ -926,31 +737,27 @@
         </svg>
     </section>
 
-    <!-- ===== MAIN ===== -->
+    <!-- MAIN -->
     <main class="container">
+        <div class="section-title"><span>🏆</span> Sản Phẩm Nổi Bật</div>
 
-        <div class="section-title">
-            <span class="section-title-icon">🏆</span>
-            Sản Phẩm Nổi Bật
-        </div>
-
-        <!-- FILTER -->
+        <!-- FILTER — dùng ViewBag.Categories -->
         <div class="filter-bar" id="filterBar">
             <button class="filter-btn active" onclick="filterCat(this, 0)">Tất cả</button>
-            @if (Model?.Categories != null)
+            @if (ViewBag.Categories != null)
             {
-                foreach (var cat in Model.Categories)
+                foreach (var cat in ViewBag.Categories)
                 {
                     <button class="filter-btn" onclick="filterCat(this, @cat.Id)">@cat.Name</button>
                 }
             }
         </div>
 
-        <!-- PRODUCTS GRID -->
+        <!-- PRODUCTS — dùng thẳng Model (List<Drink>) -->
         <div class="products-grid" id="productsGrid">
-            @if (Model?.Drinks != null && Model.Drinks.Any())
+            @if (Model != null && Model.Any())
             {
-                foreach (var drink in Model.Drinks)
+                foreach (var drink in Model)
                 {
                     <div class="product-card" data-cat="@drink.CategoryId" data-id="@drink.Id">
                         <div style="position:relative;">
@@ -983,14 +790,12 @@
             }
             else
             {
-                <p style="color:#94A3B8; grid-column:1/-1; text-align:center; padding:40px;">
-                    Chưa có sản phẩm nào.
-                </p>
+                <p style="color:#94A3B8; grid-column:1/-1; text-align:center; padding:40px;">Chưa có sản phẩm nào.</p>
             }
         </div>
     </main>
 
-    <!-- ===== DETAIL MODAL ===== -->
+    <!-- MODAL -->
     <div class="modal-overlay" id="detailModal" onclick="closeModal(event)">
         <div class="modal-box">
             <button class="modal-close" onclick="closeDetailModal()"><i class="fas fa-times"></i></button>
@@ -1015,13 +820,13 @@
         </div>
     </div>
 
-    <!-- ===== TOAST ===== -->
+    <!-- TOAST -->
     <div class="toast" id="toast">
         <i class="fas fa-check-circle" style="color:#4ADE80;"></i>
         <span id="toastMsg">Đã thêm vào giỏ!</span>
     </div>
 
-    <!-- ===== FOOTER ===== -->
+    <!-- FOOTER -->
     <footer class="footer">
         <div class="container">
             <div class="footer-grid">
@@ -1048,7 +853,6 @@
     </footer>
 
     <script>
-        // ===== CART (localStorage) =====
         let cart = JSON.parse(localStorage.getItem('wsCart') || '[]');
 
         function saveCart() {
@@ -1072,20 +876,17 @@
             showToast(`Đã thêm "${name}" vào giỏ!`);
         }
 
-        // ===== FILTER =====
         function filterCat(btn, catId) {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             document.querySelectorAll('.product-card').forEach(card => {
-                if (catId === 0 || parseInt(card.dataset.cat) === catId) {
+                if (catId === 0 || parseInt(card.dataset.cat) === catId)
                     card.classList.remove('hidden');
-                } else {
+                else
                     card.classList.add('hidden');
-                }
             });
         }
 
-        // ===== DETAIL MODAL =====
         let currentModal = { id: null, name: '', price: 0, img: '' };
         let modalQtyVal = 1;
 
@@ -1097,36 +898,20 @@
             document.getElementById('modalPrice').textContent = 'đ ' + price.toLocaleString('vi-VN');
             document.getElementById('modalCategory').textContent = catName || 'Sản phẩm';
             document.getElementById('modalQty').textContent = 1;
-
             const imgEl = document.getElementById('modalImg');
-            if (img) {
-                imgEl.innerHTML = `<img src="${img}" alt="${name}" style="width:100%;height:100%;object-fit:cover;" />`;
-            } else {
-                imgEl.innerHTML = '💧';
-            }
-
+            if (img) imgEl.innerHTML = `<img src="${img}" alt="${name}" style="width:100%;height:100%;object-fit:cover;" />`;
+            else imgEl.innerHTML = '💧';
             document.getElementById('modalAddBtn').onclick = () => {
                 addToCart(currentModal.id, currentModal.name, currentModal.price, currentModal.img, modalQtyVal);
                 closeDetailModal();
             };
-
             document.getElementById('detailModal').classList.add('show');
         }
 
-        function closeDetailModal() {
-            document.getElementById('detailModal').classList.remove('show');
-        }
+        function closeDetailModal() { document.getElementById('detailModal').classList.remove('show'); }
+        function closeModal(e) { if (e.target === document.getElementById('detailModal')) closeDetailModal(); }
+        function changeQty(delta) { modalQtyVal = Math.max(1, modalQtyVal + delta); document.getElementById('modalQty').textContent = modalQtyVal; }
 
-        function closeModal(e) {
-            if (e.target === document.getElementById('detailModal')) closeDetailModal();
-        }
-
-        function changeQty(delta) {
-            modalQtyVal = Math.max(1, modalQtyVal + delta);
-            document.getElementById('modalQty').textContent = modalQtyVal;
-        }
-
-        // ===== TOAST =====
         let toastTimer;
         function showToast(msg) {
             const toast = document.getElementById('toast');
@@ -1136,26 +921,6 @@
             toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
         }
 
-        // ===== ADMIN DROPDOWN =====
-        document.getElementById('userBtn').addEventListener('click', function(e) {
-            e.stopPropagation();
-            document.getElementById('adminDropdown').classList.toggle('show');
-        });
-
-        document.addEventListener('click', function() {
-            document.getElementById('adminDropdown').classList.remove('show');
-        });
-
-        function goToAdmin() {
-            const path = document.getElementById('adminPathInput').value.trim();
-            if (path) window.location.href = path;
-        }
-
-        document.getElementById('adminPathInput').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') goToAdmin();
-        });
-
-        // Init badge
         updateBadge();
     </script>
 </body>

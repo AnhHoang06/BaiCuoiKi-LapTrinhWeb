@@ -1,14 +1,5 @@
-﻿using QLBanNuoc.Models;
-
-namespace QLBanNuoc.ViewModels
+﻿namespace QLBanNuoc.Models
 {
-    public class HomeIndexViewModel
-    {
-        public List<Drink> Drinks { get; set; } = new();
-        public List<Category> Categories { get; set; } = new();
-    }
-
-    // DTO nhận JSON từ trang giỏ hàng
     public class PlaceOrderRequest
     {
         public string CustomerName { get; set; } = "";
