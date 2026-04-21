@@ -22,7 +22,7 @@ namespace QLBanNuoc.Data
                         Name = "Trà sữa truyền thống",
                         Price = 25000,
                         CategoryId = traSua.Id,
-                        ImageUrl = "",
+                        ImageUrl = "/images/Item/TraSuaTruyenThong.jpg",
                         Description = "Best seller",
                         IsAvailable = true
                     },
