@@ -9,7 +9,7 @@ namespace QLBanNuoc.Controllers
         // Hàm này sẽ tự động chặn cửa kiểm tra TRƯỚC khi cho phép vào trang
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            var session = context.HttpContext.Session.GetString("AdminLogin");
+            var session = context.HttpContext.Session.GetString("Admin");
 
             if (string.IsNullOrEmpty(session))
             {

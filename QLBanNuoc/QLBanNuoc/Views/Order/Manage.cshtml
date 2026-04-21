@@ -1,0 +1,112 @@
+﻿@model IEnumerable<QLBanNuoc.Models.Order>
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Quản lý đơn hàng";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold text-lat-orange">QUẢN LÝ ĐƠN HÀNG</h3>
+</div>
+
+<div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+    <div class="card-body p-0">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="bg-light">
+                <tr>
+                    <th class="ps-4 py-3 text-muted">MÃ ĐƠN</th>
+                    <th class="py-3 text-muted">KHÁCH HÀNG</th>
+                    <th class="py-3 text-muted">THỜI GIAN</th>
+                    <th class="py-3 text-muted">LOẠI ĐƠN</th>
+                    <th class="py-3 text-muted">TỔNG TIỀN</th>
+                    <th class="py-3 text-muted">TRẠNG THÁI</th>
+                    <th class="text-center py-3 text-muted">HÀNH ĐỘNG</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="7" class="text-center py-5 text-muted">
+                            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                            Chưa có đơn hàng nào.
+                        </td>
+                    </tr>
+                }
+
+                @foreach (var order in Model)
+                {
+                    <tr>
+                        <td class="ps-4 fw-bold text-secondary">#@order.Id</td>
+                        <td>
+                            <div class="fw-bold text-dark">@order.CustomerName</div>
+                            <small class="text-muted"><i class="bi bi-telephone-fill me-1"></i>@order.Phone</small>
+                        </td>
+                        <td>
+                            <span class="d-block">@order.CreatedAt.ToString("dd/MM/yyyy")</span>
+                            <small class="text-muted">@order.CreatedAt.ToString("HH:mm")</small>
+                        </td>
+                        <td>
+                            @* Dịch mã Loại đơn *@
+                            @if (order.OrderType == "TaiQuan")
+                            {
+                                <span class="badge bg-primary bg-opacity-10 text-primary"><i class="bi bi-shop me-1"></i>Tại quán (Bàn @order.CafeTable?.TableNumber)</span>
+                            }
+                            else if (order.OrderType == "MangDi")
+                            {
+                                <span class="badge bg-info bg-opacity-10 text-info"><i class="bi bi-bag me-1"></i>Mang đi</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success bg-opacity-10 text-success"><i class="bi bi-truck me-1"></i>Giao hàng</span>
+                            }
+                        </td>
+                        <td class="fw-bold text-lat-orange">@string.Format("{0:N0}", order.TotalPrice) đ</td>
+                        <td>
+                            @* Dịch mã Trạng thái *@
+                            @switch (order.Status)
+                            {
+                                case "ChoXacNhan":
+                                    <span class="badge bg-warning text-dark px-3 rounded-pill">Chờ xác nhận</span>
+                                    break;
+                                case "DaXacNhan":
+                                    <span class="badge bg-info text-dark px-3 rounded-pill">Đã xác nhận</span>
+                                    break;
+                                case "DangPhaChe":
+                                    <span class="badge bg-primary px-3 rounded-pill">Đang pha chế</span>
+                                    break;
+                                case "HoanThanh":
+                                    <span class="badge bg-success px-3 rounded-pill">Hoàn thành</span>
+                                    break;
+                                case "DaHuy":
+                                    <span class="badge bg-danger px-3 rounded-pill">Đã hủy</span>
+                                    break;
+                            }
+                        </td>
+                        <td class="text-center">
+                            @* Nút xem chi tiết đơn hàng (Sẽ làm ở bước sau) *@
+                            <button class="btn btn-sm btn-outline-info me-1 border-0" title="Xem chi tiết">
+                                <i class="bi bi-eye-fill fs-5"></i>
+                            </button>
+                            @* Nút đổi trạng thái (Sẽ làm ở bước sau) *@
+                            <button class="btn btn-sm btn-outline-lat-orange border-0" title="Đổi trạng thái">
+                                <i class="bi bi-arrow-repeat fs-5"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .btn-outline-lat-orange {
+        color: var(--lat-orange);
+        border-color: var(--lat-orange);
+    }
+
+        .btn-outline-lat-orange:hover {
+            background-color: var(--lat-orange);
+            color: white;
+        }
+</style>

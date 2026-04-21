@@ -1,4 +1,4 @@
-﻿@model IEnumerable<dynamic>
+﻿@model IEnumerable<QLBanNuoc.Models.Drink>
 @{
     Layout = "_AdminLayout";
     ViewData["Title"] = "Quản lý đồ uống";
@@ -37,10 +37,13 @@
                                 <span class="fw-bold text-dark">@drink.Name</span>
                             </div>
                         </td>
-                        <td><span class="badge bg-secondary bg-opacity-10 text-secondary">@drink.Category</span></td>
+
+                        <td><span class="badge bg-secondary bg-opacity-10 text-secondary">@drink.Category?.Name</span></td>
+
                         <td class="fw-bold text-lat-orange">@string.Format("{0:N0}", drink.Price) đ</td>
+
                         <td>
-                            @if (drink.Status == "Còn hàng")
+                            @if (drink.IsAvailable)
                             {
                                 <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">Còn hàng</span>
                             }
