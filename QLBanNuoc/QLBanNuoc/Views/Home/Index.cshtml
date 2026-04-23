@@ -239,7 +239,7 @@
         .hero-content {
             position: relative;
             z-index: 2;
-            height: 100%;
+            height: 200px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -697,6 +697,14 @@
             font-size: 13px;
             color: #94A3B8;
         }
+
+        ::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        #searchInput::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
     </style>
 </head>
 <body>
@@ -709,6 +717,28 @@
             </div>
             <span class="brand-name">LATShop</span>
         </a>
+        <!-- SEARCH BAR -->
+        <div style="position:relative; flex:1; max-width:600px; margin:0 48px;">
+            <i class="fas fa-search" style="position:absolute; left:16px; top:50%;
+                  transform:translateY(-50%); color:rgba(255,255,255,0.8); z-index:1;"></i>
+            <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm..."
+                   onkeydown="if(event.key==='Enter') searchDrinks(this.value)"
+                   oninput="showSuggestions(this.value)"
+                   style="width:100%; padding:11px 16px 11px 44px;
+                  border:2px solid rgba(255,255,255,0.35);
+                  border-radius:50px; font-family:'Nunito',sans-serif; font-size:14px;
+                  font-weight:600; outline:none;
+                  background:rgba(255,255,255,0.20);
+                  color:white; transition:all 0.2s;"
+                   onfocus="this.style.background='rgba(255,255,255,0.30)'; this.style.borderColor='rgba(255,255,255,0.7)'"
+                   onblur="this.style.background='rgba(255,255,255,0.20)'; this.style.borderColor='rgba(255,255,255,0.35)'; setTimeout(()=>hideSuggestions(),200)" />
+            <!-- Bảng gợi ý -->
+            <div id="suggestions" style="display:none; position:absolute; top:calc(100% + 6px); left:0; right:0;
+         background:white; border-radius:14px; box-shadow:0 8px 32px rgba(0,0,0,0.15);
+         z-index:2000; overflow:hidden; max-height:300px; overflow-y:auto;"></div>
+        </div>
+
+        <!--Nút trang Chủ-->
         <ul class="navbar-links">
             <li><a href="/"><i class="fas fa-home"></i> Trang chủ</a></li>
             <li>
@@ -720,8 +750,8 @@
             </li>
         </ul>
     </nav>
-
-    <!-- HERO -->
+    
+    <!-- HERO (banner)-->
     <section class="hero">
         <div class="hero-bg"></div>
         <div class="hero-water-drops">
@@ -741,7 +771,7 @@
     <main class="container">
         <div class="section-title"><span>🏆</span> Sản Phẩm Nổi Bật</div>
 
-        <!-- FILTER — dùng ViewBag.Categories -->
+        <!-- FILTER — dùng ViewBag.Categories (chỗ lọc loại nước theo categories) -->
         <div class="filter-bar" id="filterBar">
             <button class="filter-btn active" onclick="filterCat(this, 0)">Tất cả</button>
             @if (ViewBag.Categories != null)
@@ -753,7 +783,7 @@
             }
         </div>
 
-        <!-- PRODUCTS — dùng thẳng Model (List<Drink>) -->
+        <!-- PRODUCTS — dùng thẳng Model (List<Drink>)(lấy sản phầm từ DB rồi hiện lên trang chủ)-->
         <div class="products-grid" id="productsGrid">
             @if (Model != null && Model.Any())
             {
@@ -795,7 +825,7 @@
         </div>
     </main>
 
-    <!-- MODAL -->
+    <!-- MODAL (Chi tiết sản phẩm)-->
     <div class="modal-overlay" id="detailModal" onclick="closeModal(event)">
         <div class="modal-box">
             <button class="modal-close" onclick="closeDetailModal()"><i class="fas fa-times"></i></button>
@@ -820,13 +850,13 @@
         </div>
     </div>
 
-    <!-- TOAST -->
+    <!-- TOAST (thông báo khi bấm nút thêm vào giỏ hàng) -->
     <div class="toast" id="toast">
         <i class="fas fa-check-circle" style="color:#4ADE80;"></i>
         <span id="toastMsg">Đã thêm vào giỏ!</span>
     </div>
 
-    <!-- FOOTER -->
+    <!-- FOOTER (chỗ ghi thông tin shop như sdt/gmail nằm ở phía dưới cùng của trang) -->
     <footer class="footer">
         <div class="container">
             <div class="footer-grid">
@@ -922,6 +952,67 @@
         }
 
         updateBadge();
+         // Lấy tất cả sản phẩm từ card (Script thanh tim kiem)
+        function getAllDrinks() {
+            return Array.from(document.querySelectorAll('.product-card')).map(card => ({
+                el: card,
+                name: card.querySelector('.product-name').textContent,
+                desc: card.querySelector('.product-desc').textContent
+            }));
+        }
+
+        function showSuggestions(keyword) {
+            const kw = keyword.trim().toLowerCase();
+            const box = document.getElementById('suggestions');
+            if (kw === '') { hideSuggestions(); return; }
+
+            const matches = getAllDrinks().filter(d =>
+                d.name.toLowerCase().includes(kw) || d.desc.toLowerCase().includes(kw)
+            );
+
+            if (matches.length === 0) {
+                box.innerHTML = `<div style="padding:14px 16px; color:#94A3B8; font-size:14px;">Không tìm thấy sản phẩm</div>`;
+            } else {
+                box.innerHTML = matches.map(d => `
+                    <div onclick="selectSuggestion('${d.name.replace(/'/g, "\\'")}')"
+                         style="padding:12px 16px; cursor:pointer; font-size:14px; font-weight:600;
+                                color:#374151; border-bottom:1px solid #F1F5F9; transition:background 0.15s;"
+                         onmouseover="this.style.background='#FFF7ED'"
+                         onmouseout="this.style.background='white'">
+                        <i class="fas fa-search" style="color:#F97316; margin-right:8px; font-size:12px;"></i>
+                        ${d.name}
+                    </div>
+                `).join('');
+            }
+            box.style.display = 'block';
+        }
+
+        function hideSuggestions() {
+            document.getElementById('suggestions').style.display = 'none';
+        }
+
+        function selectSuggestion(name) {
+            document.getElementById('searchInput').value = name;
+            hideSuggestions();
+            searchDrinks(name);
+        }
+
+        function searchDrinks(keyword) {
+            const kw = keyword.trim().toLowerCase();
+            hideSuggestions();
+            document.querySelectorAll('.product-card').forEach(card => {
+                const name = card.querySelector('.product-name').textContent.toLowerCase();
+                const desc = card.querySelector('.product-desc').textContent.toLowerCase();
+                if (kw === '' || name.includes(kw) || desc.includes(kw))
+                    card.classList.remove('hidden');
+                else
+                    card.classList.add('hidden');
+            });
+            if (kw !== '') {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                document.querySelector('.filter-btn').classList.add('active');
+            }
+        }
     </script>
 </body>
 </html>
