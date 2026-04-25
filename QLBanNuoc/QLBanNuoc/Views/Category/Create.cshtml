@@ -1,0 +1,34 @@
+﻿@model QLBanNuoc.Models.Category
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Thêm Danh Mục Mới";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold text-lat-orange">THÊM DANH MỤC</h3>
+    <a href="/Category/Index" class="btn btn-outline-secondary rounded-pill px-4">
+        <i class="bi bi-arrow-left me-2"></i> QUAY LẠI
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-4">
+                <form asp-action="Create" method="post">
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-secondary">Tên danh mục <span class="text-danger">*</span></label>
+                        <input asp-for="Name" class="form-control form-control-lg" placeholder="VD: Nước ép tươi" required>
+                        <span asp-validation-for="Name" class="text-danger small mt-1"></span>
+                    </div>
+
+                    <div class="text-end">
+                        <button type="submit" class="btn bg-lat-orange text-white fw-bold px-4 rounded-pill shadow-sm">
+                            <i class="bi bi-plus-circle-fill me-2"></i> TẠO MỚI
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

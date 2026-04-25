@@ -37,10 +37,19 @@ namespace QLBanNuoc.Controllers
         {
             if (HttpContext.Session.GetString("Admin") == null)
                 return RedirectToAction("Login");
+            // 1. Đếm tổng số đơn hàng đã từng đặt
+            ViewBag.TotalOrders = _context.Orders.Count();
 
+            // 2. Tính tổng doanh thu (CHÚ Ý: Chỉ cộng tiền của những đơn "Hoàn thành")
+            ViewBag.TotalRevenue = _context.Orders
+                                           .Where(o => o.Status == "HoanThanh")
+                                           .Sum(o => o.TotalPrice);
+
+            // 3. Đếm tổng số món nước đang kinh doanh
+            ViewBag.TotalDrinks = _context.Drinks.Count();
             return View();
         }
-        // Vailoz
+        
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();

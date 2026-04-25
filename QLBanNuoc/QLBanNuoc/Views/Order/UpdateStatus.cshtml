@@ -1,0 +1,48 @@
+﻿@model QLBanNuoc.Models.Order
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Cập nhật trạng thái đơn #" + Model.Id;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold text-lat-orange">CẬP NHẬT TRẠNG THÁI ĐƠN #@Model.Id</h3>
+    <a href="/Order/Manage" class="btn btn-outline-secondary rounded-pill px-4">
+        <i class="bi bi-arrow-left me-2"></i> QUAY LẠI
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-5">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-4">
+
+                <form asp-action="UpdateStatus" method="post">
+                    <input type="hidden" name="id" value="@Model.Id" />
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-secondary">Trạng thái hiện tại:</label>
+                        <input type="text" class="form-control bg-light" value="@Model.Status" readonly>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-secondary">Chuyển sang trạng thái <span class="text-danger">*</span></label>
+                        <select name="status" class="form-select form-select-lg" required>
+                            <option value="ChoXacNhan" selected="@(Model.Status == "ChoXacNhan")">Chờ xác nhận</option>
+                            <option value="DaXacNhan" selected="@(Model.Status == "DaXacNhan")">Đã xác nhận</option>
+                            <option value="DangPhaChe" selected="@(Model.Status == "DangPhaChe")">Đang pha chế</option>
+                            <option value="HoanThanh" selected="@(Model.Status == "HoanThanh")">Hoàn thành</option>
+                            <option value="DaHuy" selected="@(Model.Status == "DaHuy")">Đã hủy (Khách boom hàng)</option>
+                        </select>
+                    </div>
+
+                    <div class="text-end">
+                        <button type="submit" class="btn bg-lat-orange text-white fw-bold px-4 rounded-pill shadow-sm">
+                            <i class="bi bi-check-circle-fill me-2"></i> LƯU THAY ĐỔI
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
