@@ -56,7 +56,17 @@
                         <td>
                             @if (order.OrderType == "TaiQuan")
                             {
-                                <span class="badge bg-primary bg-opacity-10 text-primary"><i class="bi bi-shop me-1"></i>Tại quán (Bàn @order.CafeTable?.TableNumber)</span>
+                                <span class="badge bg-primary bg-opacity-10 text-primary">
+                                    <i class="bi bi-shop me-1"></i>
+                                    @if (order.CafeTable != null)
+                                    {
+                                        <span>Tại quán (Bàn @order.CafeTable.TableNumber)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>Tại quán (Chờ gán bàn)</span>
+                                    }
+                                </span>
                             }
                             else if (order.OrderType == "MangDi")
                             {

@@ -1,0 +1,65 @@
+﻿@model IEnumerable<QLBanNuoc.Models.CafeTable>
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Sơ đồ bàn";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold text-lat-orange">QUẢN LÝ SƠ ĐỒ BÀN</h3>
+    <a href="/Table/Create" class="btn bg-lat-orange text-white fw-bold px-4 rounded-pill shadow-sm">
+        <i class="bi bi-plus-circle-fill me-2"></i> THÊM BÀN MỚI
+    </a>
+</div>
+
+<div class="row">
+    @foreach (var table in Model)
+    {
+        string cardClass = "bg-success";
+        string statusText = "Bàn trống";
+
+        if (table.Status == "DangSuDung")
+        {
+            cardClass = "bg-danger";
+            statusText = "Đang có khách";
+        }
+
+        <div class="col-md-3 mb-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100 @cardClass text-white bg-opacity-75">
+                <div class="card-body text-center p-4">
+                    <div class="display-5 fw-bold mb-1">@table.TableNumber</div>
+                    <div class="small opacity-75 mb-3">Sức chứa: @table.Capacity người</div>
+                    <div class="badge bg-white text-dark mb-4 px-3 py-2 rounded-pill">@statusText</div>
+
+                    <div class="dropdown">
+                        <button class="btn btn-light btn-sm w-100 rounded-pill dropdown-toggle fw-bold" type="button" data-bs-toggle="dropdown">
+                            ĐỔI TRẠNG THÁI
+                        </button>
+                        <ul class="dropdown-menu border-0 shadow">
+                            <li>
+                                <form asp-action="ChangeStatus" method="post">
+                                    <input type="hidden" name="id" value="@table.Id" />
+                                    <input type="hidden" name="newStatus" value="Trong" />
+                                    <button class="dropdown-item">Trống</button>
+                                </form>
+                            </li>
+                            <li>
+                                <form asp-action="ChangeStatus" method="post">
+                                    <input type="hidden" name="id" value="@table.Id" />
+                                    <input type="hidden" name="newStatus" value="DangSuDung" />
+                                    <button class="dropdown-item text-danger fw-bold">Đang có khách</button>
+                                </form>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form asp-action="Delete" method="post" onsubmit="return confirm('Xóa bàn này?')">
+                                    <input type="hidden" name="id" value="@table.Id" />
+                                    <button class="dropdown-item text-muted small">Xóa bàn</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
