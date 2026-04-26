@@ -19,7 +19,7 @@ namespace QLBanNuoc.Controllers
             return View(tables);
         }
 
-        // Thêm bàn mới
+        // Thêm bàn mới( TẠM THỜI KHÔNG SỬ DỤNG)
         [HttpGet]
         public IActionResult Create() => View();
 
