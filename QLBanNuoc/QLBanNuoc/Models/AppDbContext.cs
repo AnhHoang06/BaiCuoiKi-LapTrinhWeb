@@ -68,10 +68,6 @@ namespace QLBanNuoc.Models
                 entity.HasCheckConstraint("CK_Order_OrderType", "[OrderType] IN (N'TaiQuan', N'MangDi', N'GiaoHang')");
                 entity.HasCheckConstraint("CK_Order_Status", "[Status] IN (N'ChoXacNhan', N'DaXacNhan', N'DangPhaChe', N'HoanThanh', N'DaHuy')");
                 entity.HasCheckConstraint("CK_Order_TotalPrice", "[TotalPrice] >= 0");
-                entity.HasCheckConstraint(
-                    "CK_Order_TableId_ByType",
-                    "([OrderType] = N'TaiQuan' AND [TableId] IS NOT NULL) OR ([OrderType] IN (N'MangDi', N'GiaoHang') AND [TableId] IS NULL)"
-                );
             });
 
             modelBuilder.Entity<OrderItem>(entity =>

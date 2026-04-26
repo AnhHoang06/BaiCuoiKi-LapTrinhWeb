@@ -1,37 +1,4 @@
-﻿//using System.Diagnostics;
-//using Microsoft.AspNetCore.Mvc;
-//using QLBanNuoc.Models;
-//// test git 
-//namespace QLBanNuoc.Controllers
-//{
-//    public class HomeController : Controller
-//    {
-//        private readonly ILogger<HomeController> _logger;
-
-//        public HomeController(ILogger<HomeController> logger)
-//        {
-//            _logger = logger;
-//        }
-
-//        public IActionResult Index()
-//        {
-//            return View();
-//        }
-
-//        public IActionResult Privacy()
-//        {
-//            return View();
-//        }
-
-//        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-//        public IActionResult Error()
-//        {
-//            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-//        }
-//    }
-//}
-
-
+﻿
 using System.Diagnostics;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
@@ -80,14 +47,7 @@ namespace QLBanNuoc.Controllers
 
             // Xử lý bàn (chỉ khi TaiQuan)
             int? tableId = null;
-            if (req.OrderType == "TaiQuan" && req.TableNumber.HasValue)
-            {
-                var table = await _context.CafeTables
-                    .FirstOrDefaultAsync(t => t.TableNumber == req.TableNumber.Value);
-                if (table == null)
-                    return Json(new { success = false, message = $"Không tìm thấy bàn số {req.TableNumber}." });
-                tableId = table.Id;
-            }
+            
 
             var order = new Order
             {
@@ -176,6 +136,22 @@ namespace QLBanNuoc.Controllers
             });
 
             return Json(new { success = true, orders = result });
+        }
+
+        // GET: /Home/GetAvailableTables (action lấy danh sách bàn trống để khách chọn khi đặt tại quán)
+        public async Task<IActionResult> GetAvailableTables()
+        {
+            var tables = await _context.CafeTables
+                .Where(t => t.Status == "Trong")
+                .OrderBy(t => t.TableNumber)
+                .Select(t => new {
+                    id = t.Id,
+                    tableNumber = t.TableNumber,
+                    capacity = t.Capacity
+                })
+                .ToListAsync();
+
+            return Json(tables);
         }
 
         public IActionResult Privacy() => View();
