@@ -120,6 +120,64 @@ namespace QLBanNuoc.Controllers
             return Json(new { success = true, orderId = order.Id });
         }
 
+        // GET: /Home/TraCuu?phone=0123456789 (action tra cứu đơn hàng theo số điện thoại)
+        public async Task<IActionResult> TraCuu(string phone)
+        {
+            if (string.IsNullOrEmpty(phone))
+                return Json(new { success = false, message = "Vui lòng nhập số điện thoại." });
+
+            var orders = await _context.Orders
+                .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Drink)
+                .Where(o => o.Phone == phone)
+                .OrderByDescending(o => o.CreatedAt)
+                .ToListAsync();
+
+            if (!orders.Any())
+                return Json(new { success = false, message = "Không tìm thấy đơn hàng nào." });
+
+            var result = orders.Select(o => new {
+                id = o.Id,
+                customerName = o.CustomerName,
+                phone = o.Phone,
+                status = o.Status,
+                statusText = o.Status switch
+                {
+                    "ChoXacNhan" => "⏳ Chờ xác nhận",
+                    "DaXacNhan" => "✅ Đã xác nhận",
+                    "DangPhaChe" => "☕ Đang pha chế",
+                    "HoanThanh" => "🎉 Hoàn thành",
+                    "DaHuy" => "❌ Đã hủy",
+                    _ => o.Status
+                },
+                statusColor = o.Status switch
+                {
+                    "ChoXacNhan" => "#F59E0B",
+                    "DaXacNhan" => "#3B82F6",
+                    "DangPhaChe" => "#8B5CF6",
+                    "HoanThanh" => "#10B981",
+                    "DaHuy" => "#EF4444",
+                    _ => "#94A3B8"
+                },
+                totalPrice = o.TotalPrice,
+                createdAt = o.CreatedAt.ToString("dd/MM/yyyy HH:mm"),
+                orderType = o.OrderType switch
+                {
+                    "TaiQuan" => "Tại quán",
+                    "MangDi" => "Mang đi",
+                    "GiaoHang" => "Giao hàng",
+                    _ => o.OrderType
+                },
+                items = o.OrderItems.Select(oi => new {
+                    name = oi.Drink?.Name ?? "?",
+                    qty = oi.Quantity,
+                    price = oi.Price
+                })
+            });
+
+            return Json(new { success = true, orders = result });
+        }
+
         public IActionResult Privacy() => View();
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

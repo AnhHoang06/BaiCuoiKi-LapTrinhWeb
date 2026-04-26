@@ -738,7 +738,7 @@
          z-index:2000; overflow:hidden; max-height:300px; overflow-y:auto;"></div>
         </div>
 
-        <!--Nút trang Chủ-->
+        <!--Các Nút trang Chủ-->
         <ul class="navbar-links">
             <li><a href="/"><i class="fas fa-home"></i> Trang chủ</a></li>
             <li>
@@ -747,6 +747,17 @@
                     Giỏ hàng
                     <span class="cart-badge" id="cartBadge">0</span>
                 </a>
+            </li>
+            <li>
+                <button onclick="document.getElementById('traCuuModal').classList.add('show')"
+                        style="background:rgba(255,255,255,0.18); border:none; border-radius:10px;
+                   padding:8px 16px; color:white; font-weight:700; font-size:15px;
+                   cursor:pointer; display:flex; align-items:center; gap:8px;
+                   font-family:'Nunito',sans-serif; transition:background 0.2s;"
+                        onmouseover="this.style.background='rgba(255,255,255,0.28)'"
+                        onmouseout="this.style.background='rgba(255,255,255,0.18)'">
+                    <i class="fas fa-receipt"></i> Tra cứu đơn
+                </button>
             </li>
         </ul>
     </nav>
@@ -824,6 +835,40 @@
             }
         </div>
     </main>
+
+
+    <!-- MODAL TRA CỨU ĐƠN HÀNG -->
+    <div class="modal-overlay" id="traCuuModal" onclick="if(event.target===this) closeTraCuu()">
+        <div class="modal-box" style="max-width:640px;">
+            <button class="modal-close" onclick="closeTraCuu()"><i class="fas fa-times"></i></button>
+            <div style="padding:28px;">
+                <h2 style="font-size:20px; font-weight:900; margin-bottom:6px;">
+                    <i class="fas fa-receipt" style="color:var(--orange);"></i> Tra cứu đơn hàng
+                </h2>
+                <p style="color:#64748B; font-size:14px; margin-bottom:20px;">Nhập số điện thoại đặt hàng để xem trạng thái</p>
+
+                <div style="display:flex; gap:10px; margin-bottom:20px;">
+                    <input type="tel" id="traCuuPhone" placeholder="Nhập số điện thoại..."
+                           onkeydown="if(event.key==='Enter') traCuuDon()"
+                           style="flex:1; padding:11px 16px; border:2px solid #E2E8F0; border-radius:10px;
+                              font-family:'Nunito',sans-serif; font-size:14px; font-weight:600; outline:none;"
+                           onfocus="this.style.borderColor='#F97316'"
+                           onblur="this.style.borderColor='#E2E8F0'" />
+                    <button onclick="traCuuDon()"
+                            style="background:var(--orange); color:white; border:none; border-radius:10px;
+                               padding:11px 20px; font-family:'Nunito',sans-serif; font-weight:700;
+                               font-size:14px; cursor:pointer; transition:background 0.2s; white-space:nowrap;"
+                            onmouseover="this.style.background='#EA580C'"
+                            onmouseout="this.style.background='#F97316'">
+                        <i class="fas fa-search"></i> Tìm
+                    </button>
+                </div>
+
+                <div id="traCuuResult"></div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- MODAL (Chi tiết sản phẩm)-->
     <div class="modal-overlay" id="detailModal" onclick="closeModal(event)">
@@ -1013,6 +1058,71 @@
                 document.querySelector('.filter-btn').classList.add('active');
             }
         }
+
+        // JS Tra Cứu Đơn Hàng
+        function closeTraCuu() {
+            document.getElementById('traCuuModal').classList.remove('show');
+            document.getElementById('traCuuResult').innerHTML = '';
+            document.getElementById('traCuuPhone').value = '';
+        }
+
+        async function traCuuDon() {
+            const phone = document.getElementById('traCuuPhone').value.trim();
+            if (!phone) { alert('Vui lòng nhập số điện thoại!'); return; }
+
+            const resultEl = document.getElementById('traCuuResult');
+            resultEl.innerHTML = '<p style="text-align:center; color:#94A3B8; padding:20px;"><i class="fas fa-spinner fa-spin"></i> Đang tìm...</p>';
+
+            try {
+                const res = await fetch(`/Home/TraCuu?phone=${encodeURIComponent(phone)}`);
+                const data = await res.json();
+
+                if (!data.success) {
+                    resultEl.innerHTML = `
+                        <div style="text-align:center; padding:24px; color:#94A3B8;">
+                            <i class="fas fa-box-open" style="font-size:36px; margin-bottom:12px; display:block;"></i>
+                            ${data.message}
+                        </div>`;
+                    return;
+                }
+
+                resultEl.innerHTML = data.orders.map(o => `
+                    <div style="border:1.5px solid #E2E8F0; border-radius:12px; margin-bottom:14px; overflow:hidden;">
+                        <!-- Header đơn hàng -->
+                        <div style="padding:14px 16px; background:#F8FAFC; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #E2E8F0;">
+                            <div>
+                                <span style="font-weight:800; font-size:15px;">Đơn #${o.id}</span>
+                                <span style="margin-left:10px; font-size:12px; color:#94A3B8;">${o.createdAt}</span>
+                                <span style="margin-left:8px; font-size:12px; background:#F1F5F9; padding:2px 8px; border-radius:20px; color:#64748B;">${o.orderType}</span>
+                            </div>
+                            <span style="background:${o.statusColor}20; color:${o.statusColor};
+                                         padding:4px 12px; border-radius:20px; font-size:13px; font-weight:700;">
+                                ${o.statusText}
+                            </span>
+                        </div>
+                        <!-- Danh sách sản phẩm -->
+                        <div style="padding:12px 16px;">
+                            <p style="font-size:12px; font-weight:700; color:#94A3B8; margin-bottom:8px;">SẢN PHẨM</p>
+                            ${o.items.map(item => `
+                                <div style="display:flex; justify-content:space-between; font-size:14px; padding:4px 0; border-bottom:1px solid #F1F5F9;">
+                                    <span>${item.name} <span style="color:#94A3B8;">x${item.qty}</span></span>
+                                    <span style="font-weight:700;">đ ${(item.price * item.qty).toLocaleString('vi-VN')}</span>
+                                </div>
+                            `).join('')}
+                            <!-- Tổng tiền -->
+                            <div style="display:flex; justify-content:space-between; margin-top:10px; font-weight:900; font-size:15px; color:var(--orange-dark);">
+                                <span>Tổng thanh toán</span>
+                                <span>đ ${o.totalPrice.toLocaleString('vi-VN')}</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch {
+                resultEl.innerHTML = '<p style="color:#EF4444; text-align:center;">Có lỗi xảy ra, vui lòng thử lại.</p>';
+            }
+        }
+
     </script>
 </body>
 </html>
