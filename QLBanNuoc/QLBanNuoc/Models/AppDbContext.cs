@@ -99,6 +99,7 @@ namespace QLBanNuoc.Models
 
                 entity.HasIndex(a => a.Username).IsUnique();
             });
+
         }
     }
 }

@@ -10,13 +10,18 @@ namespace QLBanNuoc.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-
+            migrationBuilder.DropCheckConstraint(
+                name: "CK_Order_TableId_ByType",
+                table: "Orders");
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-
+            migrationBuilder.AddCheckConstraint(
+                name: "CK_Order_TableId_ByType",
+                table: "Orders",
+                sql: "([OrderType] = N'TaiQuan' AND [TableId] IS NOT NULL) OR ([OrderType] IN (N'MangDi', N'GiaoHang') AND [TableId] IS NULL)");
         }
+
     }
 }
